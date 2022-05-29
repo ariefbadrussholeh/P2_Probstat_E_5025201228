@@ -93,4 +93,44 @@ t.value = (mBd-mBl)/(sp*sqrt((1/nBd)+(1/nBl))) ;t.value
 
 # ----------------- Nomor 4 ---------------------
 
+## a) Buatlah masing masing jenis spesies menjadi 3 subjek "Grup", lalu Gambarkan plot kuantil normal untuk setiap kelompok
+
+### Ambil data pada dan inisialisasi pada variabel dataset
+dataset <- read.table(url("https://rstatisticsandresearch.weebly.com/uploads/1/0/2/6/1026585/onewayanova.txt"))
+dim(dataset)
+head(dataset)
+attach(dataset)
+
+### Grup variabel dataset
+dataset$V1 <- as.factor(dataset$V1)
+dataset$V1 = factor(dataset$V1,labels = c("Kucing Oren","Kucing Hitam","Kucing Putih","Kucing Oren"))
+class(dataset$V1)
+
+### Bagi masing masing jenis spesies menjadi 3 grup
+group1 <- subset(dataset, V1=="Kucing Oren")
+group2 <- subset(dataset, V1=="Kucing Hitam")
+group3 <- subset(dataset, V1=="Kucing Putih")
+
+## b) Periksa Homogeneity of variances nya
+bartlett.test(Length~V1, data=dataset)
+
+## c)
+
+## d) 
+
+## e)
+
+## f)
+
+
 # ----------------- Nomor 5 ---------------------
+
+## a)
+
+## b)
+
+## c)
+
+## d)
+
+## f)

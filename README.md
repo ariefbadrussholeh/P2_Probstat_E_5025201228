@@ -224,9 +224,66 @@ Menghitung nilai kritikal menggunakan persamaan statistik https://www.slideshare
 
 ## Soal 4
 
+Seorang Peneliti sedang meneliti spesies dari kucing di ITS . Dalam penelitiannya ia mengumpulkan data tiga spesies kucing yaitu kucing oren, kucing hitam dan kucing putih dengan panjangnya masing-masing.
+
+Jika :
+
+- diketahui dataset https://intip.in/datasetprobstat1
+- H0 : Tidak ada perbedaan panjang antara ketiga spesies atau rata-rata panjangnya sama
+
+### a) Buatlah masing masing jenis spesies menjadi 3 subjek "Grup" (grup 1,grup 2,grup 3). Lalu Gambarkan plot kuantil normal untuk setiap kelompok dan lihat apakah ada outlier utama dalam homogenitas varians.
+
+``` r 
+### Ambil data pada dan inisialisasi pada variabel dataset
+dataset <- read.table(url("https://rstatisticsandresearch.weebly.com/uploads/1/0/2/6/1026585/onewayanova.txt"))
+dim(dataset)
+head(dataset)
+attach(dataset)
+
+### Grup variabel dataset
+dataset$V1 <- as.factor(dataset$V1)
+dataset$V1 = factor(dataset$V1,labels = c("Kucing Oren","Kucing Hitam","Kucing Putih","Kucing Oren"))
+class(dataset$V1)
+
+### Bagi masing masing jenis spesies menjadi 3 grup
+group1 <- subset(dataset, V1=="Kucing Oren")
+group2 <- subset(dataset, V1=="Kucing Hitam")
+group3 <- subset(dataset, V1=="Kucing Putih")
+```
+
+![4a](screenshot/4a.png)
+
+![4adataset](screenshot/4a%20dataset.png)
+
+**Penjelasan**
+
+Dilakukan fetch data terlebih dahulu menggunakan `read.table(url())`. Kemudian data tersebut diinisialisasi ke variabel `dataset`. Digunakan juga `dim()`, `head()`, `attach()`. Kemudian lakukan grup variabel data set. Periksa juga apakah dia menyimpan nilai pada grupnya menggunakan `class()`. Lalu bagi masing masing jenis spesies menjadi 3 grup menggunakan `subset()`.
+
+### b) Carilah atau periksalah Homogeneity of variances nya , Berapa nilai p yang didapatkan? , Apa hipotesis dan kesimpulan yang dapat diambil ?
+
+### c) Untuk uji ANOVA (satu arah), buatlah model linier dengan Panjang versus Grup dan beri nama model tersebut model 1.
+
+### d) Dari Hasil Poin C, Berapakah nilai-p ? , Apa yang dapat Anda simpulkan dari H0?
+
+### e) Verifikasilah jawaban model 1 dengan Post-hoc test Tukey HSD, dari nilai p yang didapatkan apakah satu jenis kucing lebih panjang dari yang lain? 
+
+### f) Visualisasikan data dengan ggplot2
+
 ***
 
 ## Soal 5
+
+Data yang digunakan merupakan hasil eksperimen yang dilakukan untuk mengetahui pengaruh suhu operasi (100˚C, 125˚C dan 150˚C) dan tiga jenis kaca pelat muka (A, B dan C) pada keluaran cahaya tabung osiloskop. Percobaan dilakukan sebanyak 27 kali dan didapat data sebagai berikut: Data Hasil Eksperimen. Dengan data tersebut:
+
+### a) Buatlah plot sederhana untuk visualisasi data
+
+### b) Lakukan uji ANOVA dua arah
+
+### c) Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap perlakuan (kombinasi kaca pelat muka dan suhu operasi)
+
+### d) Lakukan uji Tukeys
+
+### e) Gunakan compact letter display untuk menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
 
 ***
 
