@@ -120,6 +120,7 @@ group1 <- subset(dataset, V1=="Kucing Oren")
 group2 <- subset(dataset, V1=="Kucing Hitam")
 group3 <- subset(dataset, V1=="Kucing Putih")
 
+## b)
 
 ## c)
 

@@ -379,6 +379,6 @@ print(data_summary)
 ![5e](screenshot/5e.png)
 
 **Penjelasan**
-Dengan menggunakan compact letter display `multcompLetters4()` dapat menunjukkan perbedaan signifikan antara uji Anova dan Uji Tukey dengan menambahkan compact letter display tersebut ke tabel dengan rata-rata dan standar deviasi
+Dengan menggunakan compact letter display `multcompLetters4()` dapat menunjukkan perbedaan signifikan antara uji Anova dan Uji Tukey dengan menambahkan compact letter display tersebut ke tabel dengan rata-rata dan standar deviasi.
 
 ## ***Sekian dan Terima Kasih***
