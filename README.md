@@ -257,17 +257,31 @@ group3 <- subset(dataset, V1=="Kucing Putih")
 
 **Penjelasan**
 
-Dilakukan fetch data terlebih dahulu menggunakan `read.table(url())`. Kemudian data tersebut diinisialisasi ke variabel `dataset`. Digunakan juga `dim()`, `head()`, `attach()`. Kemudian lakukan grup variabel data set. Periksa juga apakah dia menyimpan nilai pada grupnya menggunakan `class()`. Lalu bagi masing masing jenis spesies menjadi 3 grup menggunakan `subset()`.
+Dilakukan fetch data terlebih dahulu menggunakan `read.table(url())`. Kemudian data tersebut diinisialisasi ke variabel `dataset`. Digunakan juga `dim()`, `head()`, `attach()`. Kemudian lakukan grup variabel data set. Periksa juga apakah dia menyimpan nilai pada grupnya menggunakan `class()`. Lalu bagi masing masing jenis spesies menjadi 3 grup menggunakan `subset()`. Kemudian dibawah ini akan menggambar plot kuartil normal untuk setiap group.
+
+- Group 1
+- Group 2
+- Group 3
 
 ### b) Carilah atau periksalah Homogeneity of variances nya , Berapa nilai p yang didapatkan? , Apa hipotesis dan kesimpulan yang dapat diambil ?
 
+- 
+
 ### c) Untuk uji ANOVA (satu arah), buatlah model linier dengan Panjang versus Grup dan beri nama model tersebut model 1.
+
+- 
 
 ### d) Dari Hasil Poin C, Berapakah nilai-p ? , Apa yang dapat Anda simpulkan dari H0?
 
+- 
+
 ### e) Verifikasilah jawaban model 1 dengan Post-hoc test Tukey HSD, dari nilai p yang didapatkan apakah satu jenis kucing lebih panjang dari yang lain? 
 
+- 
+
 ### f) Visualisasikan data dengan ggplot2
+
+- 
 
 ***
 
@@ -277,14 +291,94 @@ Data yang digunakan merupakan hasil eksperimen yang dilakukan untuk mengetahui p
 
 ### a) Buatlah plot sederhana untuk visualisasi data
 
+``` r
+### Membaca file GTL.csv
+GTL <- read_csv("GTL.csv")
+head(GTL)
+
+str(GTL)
+
+### Visualisasi menggunakan simple plot
+qplot(x = Temp, y = Light, geom = "point", data = GTL) +
+  facet_grid(.~Glass, labeller = label_both)
+```
+
+![5a](screenshot/5a.png)
+
+![5agtl](screenshot/5a%20gtl.png)
+
+**Penjelasan**
+
+Pertama membaca file GTL.csv yang tersimpan di local directory menggunakan `read_csv()` yang tersedia di library `readr`. Kemudian dilakukan observasi pada data menggunakan `str()`. Dibawah ini merupakan visualisasi data menggunakan simple plot menggunakan `qplot()` dan `facet_grid()`.
+
+![5aplot](screenshot/5a%20plot.png)
+
+
 ### b) Lakukan uji ANOVA dua arah
+
+``` r
+### Membuat variabel as factor sebagai ANOVA
+GTL$Glass <- as.factor(GTL$Glass)
+GTL$Temp_Factor <- as.factor(GTL$Temp)
+str(GTL)
+
+### Analisis of variance
+anova <- aov(Light ~ Glass*Temp_Factor, data = GTL)
+summary(anova)
+```
+
+![5b](screenshot/5b.png)
+
+**Penjelasan**
+
+Melakukan uji anova dua arah. Pertama membuat variable as.factor sebagai anova kemudian melakukan uji anova dua arah / analisis of variance menggunakan `aov()`.
 
 ### c) Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap perlakuan (kombinasi kaca pelat muka dan suhu operasi)
 
+``` r
+### Menampilkan tabel dengan mean dan sd
+data_summary <- group_by(GTL, Glass, Temp) %>%
+  summarise(mean=mean(Light), sd=sd(Light)) %>%
+  arrange(desc(mean))
+print(data_summary)
+```
+
+![5c](screenshot/5c.png)
+
+**Penjelasan**
+
+Menampilkan tabel dengan dan standar deviasi keluaran cahaya untuk setiap perlakuan menggunakan `group_by()` lalu melakukan `summarise()` sesuai dengan mean dan sdnya.
+
 ### d) Lakukan uji Tukeys
+
+``` r
+### Uji Tukey
+tukey <- TukeyHSD(anova)
+print(tukey)
+```
+
+![5d](screenshot/5d.png)
+
+**Penjelasan**
+
+Melakukan uji tukey dengan menggunakan `TukeyHSD()` dengan memakai hasil uji anova dua arah pada soal b.
 
 ### e) Gunakan compact letter display untuk menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
 
-***
+``` r
+### Menggunakan compact letter display
+tukey.cld <- multcompLetters4(anova, tukey)
+print(tukey.cld)
+
+### Menambahkan compact letter display tersebut ke tabel
+cld <- as.data.frame.list(tukey.cld$`Glass:Temp_Factor`)
+data_summary$Tukey <- cld$Letters
+print(data_summary)
+```
+
+![5e](screenshot/5e.png)
+
+**Penjelasan**
+Dengan menggunakan compact letter display `multcompLetters4()` dapat menunjukkan perbedaan signifikan antara uji Anova dan Uji Tukey dengan menambahkan compact letter display tersebut ke tabel dengan rata-rata dan standar deviasi
 
 ## ***Sekian dan Terima Kasih***

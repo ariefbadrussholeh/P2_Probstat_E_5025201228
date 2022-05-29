@@ -1,5 +1,14 @@
 install.packages("BSDA")
+install.packages("multcompView")
+install.packages("ggplot2")
+install.packages("devtools")
+install.packages("readr")
 
+
+library(readr)
+library(ggplot2)
+library(multcompView)
+library(dplyr)
 library(BSDA)
 
 # ------------------- Nomor 1 -----------------------
@@ -111,8 +120,6 @@ group1 <- subset(dataset, V1=="Kucing Oren")
 group2 <- subset(dataset, V1=="Kucing Hitam")
 group3 <- subset(dataset, V1=="Kucing Putih")
 
-## b) Periksa Homogeneity of variances nya
-bartlett.test(Length~V1, data=dataset)
 
 ## c)
 
@@ -125,12 +132,51 @@ bartlett.test(Length~V1, data=dataset)
 
 # ----------------- Nomor 5 ---------------------
 
-## a)
 
-## b)
+## a)  Plot sederhana untuk visualisasi data
 
-## c)
+### Membaca file GTL.csv
+GTL <- read_csv("GTL.csv")
+head(GTL)
 
-## d)
+str(GTL)
 
-## f)
+### Visualisasi menggunakan simple plot
+qplot(x = Temp, y = Light, geom = "point", data = GTL) +
+  facet_grid(.~Glass, labeller = label_both)
+
+## b) uji ANOVA dua arah
+
+### Membuat variabel as factor sebagai ANOVA
+GTL$Glass <- as.factor(GTL$Glass)
+GTL$Temp_Factor <- as.factor(GTL$Temp)
+str(GTL)
+
+### Analisis of variance
+anova <- aov(Light ~ Glass*Temp_Factor, data = GTL)
+summary(anova)
+
+## c) Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya
+
+### Menampilkan tabel dengan mean dan sd
+data_summary <- group_by(GTL, Glass, Temp) %>%
+  summarise(mean=mean(Light), sd=sd(Light)) %>%
+  arrange(desc(mean))
+print(data_summary)
+
+## d) Lakukan uji Tukey
+
+### Uji Tukey
+tukey <- TukeyHSD(anova)
+print(tukey)
+
+## f) Menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
+
+### Menggunakan compact letter display
+tukey.cld <- multcompLetters4(anova, tukey)
+print(tukey.cld)
+
+### Menambahkan compact letter display tersebut ke tabel
+cld <- as.data.frame.list(tukey.cld$`Glass:Temp_Factor`)
+data_summary$Tukey <- cld$Letters
+print(data_summary)
